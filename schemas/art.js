@@ -7,6 +7,6 @@ module.exports = new Schema({
     title: { type: String, required: true },
     artistId: { type: String, required: true },
     date: { type: Date, required: true },
-
+    description: String
 
 });
