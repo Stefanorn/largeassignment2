@@ -1,10 +1,13 @@
+const artdb = require('../data/db').Art;
 
 const artService = () => {
     const getAllArts = (cb, errorCb) => {
+        artdb.find({}, function (err, data) {
+            if(err){ throw new Error(err);}
 
-
-
-        return {hello : "world"};
+            console.log(data);
+            cb(data);
+        })
         // Your implementation goes here
     };
 

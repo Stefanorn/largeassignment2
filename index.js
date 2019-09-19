@@ -12,8 +12,9 @@ app.use(bodyParser.json());
 
 // Art Routs
 app.get('/api/arts', function (req, res) {
-
-    return res.json( artService.getAllArts() );
+    artService.getAllArts( function (art) {
+        return res.json(art);
+    });
 });
 
 app.get('/api/arts/:artId', function (req, res) {
