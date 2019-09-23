@@ -11,18 +11,28 @@ app.use(bodyParser.json());
 
 
 // Art Routs
-app.get('/api/arts', function (req, res) {
-    artService.getAllArts( function (art) {
-        return res.json(art);
-    });
+
+
+app.get('/api/arts', async function (req, res) {
+
+    const result = await artService.getAllArts();
+    return res.json(result);
 });
 
-app.get('/api/arts/:artId', function (req, res) {
+app.get('/api/arts/:artId', async function (req, res) {
+
     const artId = req.params.artId;
-    return res.json(artService.getArtById(artId));
+
+    return res.json( await artService.getArtById(artId));
 });
 
 app.post('/api/arts', function (req, res) {
+
+        artService.createArt(req.body).then(r => {
+            return res.status(201).json(r);
+        }).catch( e => {
+            return res.status(400).json(e);
+        });
 
 });
 

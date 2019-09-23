@@ -1,22 +1,31 @@
 const artdb = require('../data/db').Art;
 
+const globalTryCatch = async cb =>{
+    try {
+        return await cb();
+    } catch (e) {
+        return e;
+    }
+};
+
 const artService = () => {
-    const getAllArts = (cb, errorCb) => {
-        artdb.find({}, function (err, data) {
-            if(err){ throw new Error(err);}
 
-            console.log(data);
-            cb(data);
-        })
-        // Your implementation goes here
+    const getAllArts  = async  () => {
+        return await globalTryCatch(async () => {
+            return artdb.find({});
+        });
     };
 
-    const getArtById = (id, cb, errorCb) => {
-        // Your implementation goes here
+    const getArtById = async (id) => {
+        return await globalTryCatch( async () => {
+            return artdb.findById(id);
+        });
     };
 
-    const createArt = (art, cb, errorCb) => {
-        // Your implementation goes here
+    const createArt = async (art) =>{
+        return await globalTryCatch(async => {
+            return artdb.create(art);
+        });
     };
 
     return {
