@@ -9,10 +9,7 @@ const auctionService = require('./services/auctionService');
 
 app.use(bodyParser.json());
 
-
 // Art Routs
-
-
 app.get('/api/arts', async function (req, res) {
 
     const result = await artService.getAllArts();
@@ -37,33 +34,44 @@ app.post('/api/arts', function (req, res) {
 });
 
 // Artist Routs
-app.get('/api/artists', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/artists', async function (req, res) {
+   return res.json( await artistService.getAllArtists() );
+
 });
 
-app.get('/api/artists/:artistId', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/artists/:artistId', async function (req, res) {
+    return res.json( await artistService.getArtistById( req.params.artistId ) );
 });
 
-app.post('/api/artists', function (req, res) {
-    return res.json({hello:'world'});
+app.post('/api/artists', async function (req, res) {
+    artistService.createArtist( req.body ).then( r => {
+        return res.status(201).json(r);
+        }).catch( e => {
+            return res.status(400).json(e);
+    });
 });
 
 // Customer Routs
-app.get('/api/customers', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/customers', async function (req, res) {
+    return res.json(await customerService.getAllCustomers());
+
 });
 
-app.get('/api/customers/:customerId', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/customers/:customerId', async function (req, res) {
+    return res.json( await customerService.getCustomerById( req.params.customerId ) );
 });
 
 app.post('/api/customers', function (req, res) {
-    return res.json({hello:'world'});
+    customerService.createCustomer( req.body ).then(r => {
+        return res.status(201).json(r);
+    }).catch( e =>{
+        return res.status(400).json(e);
+    });
 });
 
-app.get('/api/customers/:customerId/auction-bids', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/customers/:customerId/auction-bids', async function (req, res) {
+
+    return res.json( await customerService.getCustomerAuctionBids( req.params.customerId ));
 });
 
 

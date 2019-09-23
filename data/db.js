@@ -6,7 +6,7 @@ const auctionBidSchema = require('../schemas/auctionBid');
 const customerSchema = require('../schemas/customer');
 
 const connection = mongoose.createConnection(
-    "mongodb+srv://databaseMaster:RedLobster44@database-a3qtz.mongodb.net/ArtCollectionDatabase",
+    "mongodb+srv://databaseMaster:RedLobster44@database-a3qtz.mongodb.net/MansionDeSubra",
     { useNewUrlParser: true, useUnifiedTopology: true });
 
 module.exports = {

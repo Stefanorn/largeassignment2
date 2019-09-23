@@ -1,18 +1,38 @@
+const customerDb = require('../data/db').Customer;
+const auctionBidDb = require('../data/db').AuctionBid;
+
+const globalTryCatch = async cb =>{
+    try {
+        return await cb();
+    } catch (e) {
+        return e;
+    }
+};
+
 const customerService = () => {
-    const getAllCustomers = (cb, errorCb) => {
-        // Your implementation goes here
+
+    const getAllCustomers = async () => {
+        return await globalTryCatch( async () => {
+          return customerDb.find({});
+        });
     };
 
-    const getCustomerById = (id, cb, errorCb) => {
-        // Your implementation goes here
+    const getCustomerById = async (id) => {
+        return await globalTryCatch( async () =>{
+            return customerDb.findById(id);
+        });
     };
 
-    const getCustomerAuctionBids = (customerId, cb, errorCb) => {
-        // Your implementation goes here
+    const getCustomerAuctionBids = async (customerId) => {
+        return await globalTryCatch(async() => {
+            return await auctionBidDb.find({"customerId": customerId});
+        });
     };
 
-	const createCustomer = (customer, cb, errorCb) => {
-        // Your implementation goes here
+	const createCustomer = async (customer)=>{
+	    return await globalTryCatch(async() => {
+            return customerDb.create(customer);
+        });
     };
 
     return {

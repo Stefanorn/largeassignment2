@@ -10,7 +10,7 @@ const globalTryCatch = async cb =>{
 
 const artService = () => {
 
-    const getAllArts  = async  () => {
+    const getAllArts  = async () => {
         return await globalTryCatch(async () => {
             return artdb.find({});
         });

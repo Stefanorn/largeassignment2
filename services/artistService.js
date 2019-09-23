@@ -1,14 +1,31 @@
+const artistDb = require('../data/db').Artist;
+
+const globalTryCatch = async cb =>{
+    try {
+        return await cb();
+    } catch (e) {
+        return e;
+    }
+};
+
 const artistService = () => {
-    const getAllArtists = (cb, errorCb) => {
-        // Your implementation goes here
+
+    const getAllArtists = async () => {
+        return await globalTryCatch( async () =>{
+            return artistDb.find({});
+        });
     };
 
-    const getArtistById = (id, cb, errorCb) => {
-        // Your implementation goes here
+    const getArtistById = async (id) => {
+        return await globalTryCatch( async () =>{
+            return artistDb.findById(id);
+        });
     };
 
-    const createArtist = (artist, cb, errorCb) => {
-        // Your implementation goes here
+    const createArtist = async (artist) => {
+        return await globalTryCatch( async () =>{
+            return artistDb.create(artist);
+        });
     };
 
     return {
@@ -16,6 +33,6 @@ const artistService = () => {
         getArtistById,
         createArtist
     };
-};
+}; 
 
 module.exports = artistService();
