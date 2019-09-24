@@ -76,16 +76,16 @@ app.get('/api/customers/:customerId/auction-bids', async function (req, res) {
 
 
 // Auction routs
-app.get('/api/auctions', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/auctions', async function (req, res) {
+    return res.json(await auctionService.getAllAuctions());
 });
 
-app.get('/api/auctions/:auctionsId', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/auctions/:auctionsId', async function (req, res) {
+    return res.json( await auctionService.getAuctionById(req.params.auctionsId));
 });
 
-app.get('/api/auctions/:auctionId/winner', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/auctions/:auctionId/winner', async function (req, res) {
+    return res.json( await auctionService.getAuctionWinner(req.params.auctionsId));
 });
 
 app.post('/api/auctions', function (req, res) {
