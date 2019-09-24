@@ -31,11 +31,12 @@ const auctionService = () => {
         return await globalTryCatch( async() =>{
         
          const auction = await AuctionDBBID.findOne().sort({price: '-1', endDate:'1'});
- 
+        
          //console.log(auction);
- 
+         console.log(auction.endDate);
+         
          const customer = await customerDB.findById(auction.customerId);
- 
+         //console.log(await AuctionDBBID.find(auction.endDate));
          return customer;
      });  
      }
