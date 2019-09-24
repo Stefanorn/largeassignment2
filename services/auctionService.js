@@ -28,17 +28,17 @@ const auctionService = () => {
         
     }
     const getAuctionWinner = async () => {
-       return await globalTryCatch( async() =>{
-       
-        return AuctionDBBID.findOne().sort('-price').exec();//function(err, price){
-            
-            //console.log(price);
-           
-            
-        //});
+        return await globalTryCatch( async() =>{
         
-        });
-    };  
+         const auction = await AuctionDBBID.findOne().sort('-price');
+ 
+         //console.log(auction);
+ 
+         const customer = await customerDB.findById(auction.customerId);
+ 
+         return customer;
+     });  
+     }
 
 	const createAuction = (auction, cb, errorCb) => {
         // Your implementation goes here
