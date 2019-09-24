@@ -1,6 +1,6 @@
 const AuctionDB = require('../data/db').Auction;
 const AuctionDBBID = require('../data/db').AuctionBid;
-//const AuctionDBID = require('../data/db').AuctionBid;
+const customerDB = require('../data/db').Customer;
 
 const globalTryCatch = async cb => {
     try {
@@ -18,19 +18,27 @@ const auctionService = () => {
     };
 
     const getAuctionById = async (id) => {
-        // Your implementation goes here
         return await globalTryCatch( async() =>{
             return AuctionDB.findById(id);
         });
         
     };
 
-    const getAuctionWinner = async (id) => {
-        // Your implementation goes here
-        return await globalTryCatch( async() =>{
-            return AuctionDBBID.findById(id);
+    function checkCustomer(){
+        
+    }
+    const getAuctionWinner = async () => {
+       return await globalTryCatch( async() =>{
+       
+        return AuctionDBBID.findOne().sort('-price').exec();//function(err, price){
+            
+            //console.log(price);
+           
+            
+        //});
+        
         });
-    };
+    };  
 
 	const createAuction = (auction, cb, errorCb) => {
         // Your implementation goes here
