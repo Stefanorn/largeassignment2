@@ -105,10 +105,10 @@ const auctionService = () => {
 
     };
 
-	const getAuctionBidsWithinAuction = async (id) => { //skilar null..s
+	const getAuctionBidsWithinAuction = async (id) => {
         return await globalTryCatch( async() =>{
 
-            return AuctionDBBID.findById(id);
+            return AuctionDBBID.find({"auctionId": id});
         });
     };
 
