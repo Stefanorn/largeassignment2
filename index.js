@@ -119,8 +119,21 @@ app.get('/api/auctions/:auctionId/bids', async function (req, res) {
     return res.json( await auctionService.getAuctionBidsWithinAuction(req.params.auctionId));
 });
 
-app.post('/api/auctions/:auctionId/bids', function (req, res) {
-    return res.json({hello:'world'});
+app.post('/api/auctions/:auctionId/bids', async function (req, res) {
+
+    var responce = await auctionService.placeNewBid( req.params.auctionId, req.body.customerId, req.body.price );
+
+    if( responce === 412 ){
+        return res.status(responce).json("ohh no 412 maby you need to bid higher maaan ...");
+    }
+    else if( responce === 403){
+        return  res.status(responce).json("dude it is forbiden man, nooot coool!")
+    }
+    else if( responce === 201){
+        return  res.status(responce).json("yeee meeen you sucessfully creaded a bid " + req.body.price + " $");
+    }
+
+
 });
 
 // http://Localhost:3000

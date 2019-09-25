@@ -43,7 +43,6 @@ const auctionService = () => {
     };
 
     const getAuctionById = async (id) => {
-
         return await globalTryCatch( async() =>{
             var auction = await AuctionDB.findById(id);
 
@@ -80,14 +79,8 @@ const auctionService = () => {
     }
     const getAuctionWinner = async () => {
         return await globalTryCatch( async() =>{
-        
          const auction = await AuctionDBBID.findOne().sort({price: '-1', endDate:'1'});
-        
-         //console.log(auction);
-        // console.log(auction.endDate);
-         
          const customer = await customerDB.findById(auction.customerId);
-         //console.log(await AuctionDBBID.find(auction.endDate));
          return customer;
      });  
      }
@@ -119,9 +112,30 @@ const auctionService = () => {
         });
     };
 
-	const placeNewBid = (auctionId, customerId, price, cb, errorCb) => {
-		// Your implementation goes here
-	}
+	const placeNewBid = async (auctionId, customerId, price) => {
+
+	    var auction = await AuctionDB.findById(auctionId);
+	    minBid = auction.minimumPrice;
+
+        var highestBid = await AuctionDBBID.findOne({ "auctionId": auctionId }).sort({price: "-1", endDate:'1'});
+        highestBid = highestBid.price;
+
+        if( minBid < price && highestBid < price ){
+            AuctionDBBID.create({ "auctionId":auctionId , "customerId": customerId, "price": price });
+            var updated = await AuctionDB.findById(auctionId).updateOne(
+                {},
+                {$set: {"auctionWinner": customerId}},
+                {upsert: false, multi: true});
+            console.log(await AuctionDB.findById(auctionId));
+            return 201;
+        }
+        else if( auction.endDate <= Date.now ){
+            return 403;
+        }
+        else {
+            return 412;
+        }
+	};
 
     return {
         getAllAuctions,
