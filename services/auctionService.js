@@ -50,7 +50,7 @@ const auctionService = () => {
         return await globalTryCatch(async () => {
         return ArtDB.findById(auction.artId).find().where({isAuctionItem: "true"}, function(err, docs){
             if(err) {
-                var error = new Error('Already exists!');
+                var error = new Error('Error!');
                 error.status = 401;
                 return next(error);
               }
