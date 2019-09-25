@@ -90,12 +90,33 @@ app.get('/api/auctions/:auctionsId/winner', async function (req, res) {
 
 });
 
+app.post('/api/auctions', function (req, res){
+    
+    auctionService.createAuction(req.body).then(r => {
+        return res.status(201).json(r);
+    }).catch( e => {
+        return res.status(400).json(e);
+    });
+});
+
+app.post('/api/arts', function (req, res) {
+
+        artService.createArt(req.body).then(r => {
+            return res.status(201).json(r);
+        }).catch( e => {
+            return res.status(400).json(e);
+        });
+
+});
+
+
+
 app.post('/api/auctions', function (req, res) {
     return res.json({hello:'world'});
 });
 
-app.get('/api/auctions/:auctionId/bids', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/auctions/:auctionId/bids', async function (req, res) {
+    return res.json( await auctionService.getAuctionBidsWithinAuction(req.params.auctionId));
 });
 
 app.post('/api/auctions/:auctionId/bids', function (req, res) {

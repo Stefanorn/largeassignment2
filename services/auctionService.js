@@ -1,5 +1,6 @@
 const AuctionDB = require('../data/db').Auction;
 const AuctionDBBID = require('../data/db').AuctionBid;
+const ArtDB = require('../data/db').Art;
 const customerDB = require('../data/db').Customer;
 
 const globalTryCatch = async cb => {
@@ -77,25 +78,45 @@ const auctionService = () => {
     function checkCustomer(){
         
     }
-    const getAuctionWinner = async ( auctionId ) => {
+    const getAuctionWinner = async () => {
         return await globalTryCatch( async() =>{
-
-         const auction = await AuctionDBBID
-             .find({"auctionId":auctionId})
-             .findOne()
-             .sort({price: '-1', endDate:'1'});
         
+         const auction = await AuctionDBBID.findOne().sort({price: '-1', endDate:'1'});
+        
+         //console.log(auction);
+        // console.log(auction.endDate);
+         
          const customer = await customerDB.findById(auction.customerId);
+         //console.log(await AuctionDBBID.find(auction.endDate));
          return customer;
      });  
      }
 
-	const createAuction = (auction, cb, errorCb) => {
+     
+	const createAuction = async (auction) => {
         // Your implementation goes here
+        
+        return await globalTryCatch(async () => {
+        return ArtDB.findById(auction.artId).find().where({isAuctionItem: "true"}, function(err, docs){
+            if(err) {
+                var error = new Error('Error!');
+                error.status = 401;
+                return next(error);
+              }
+        }).exec();
+        
+        });
+        
+        
+           
+
     };
 
-	const getAuctionBidsWithinAuction = (auctionId, cb, errorCb) => {
-        // Your implementation goes here
+	const getAuctionBidsWithinAuction = async (id) => { //skilar null..s
+        return await globalTryCatch( async() =>{
+
+            return AuctionDBBID.findById(id);
+        });
     };
 
 	const placeNewBid = (auctionId, customerId, price, cb, errorCb) => {
