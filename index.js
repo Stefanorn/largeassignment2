@@ -115,8 +115,8 @@ app.post('/api/auctions', function (req, res) {
     return res.json({hello:'world'});
 });
 
-app.get('/api/auctions/:auctionId/bids', function (req, res) {
-    return res.json({hello:'world'});
+app.get('/api/auctions/:auctionId/bids', async function (req, res) {
+    return res.json( await auctionService.getAuctionBidsWithinAuction(req.params.auctionId));
 });
 
 app.post('/api/auctions/:auctionId/bids', function (req, res) {
