@@ -81,11 +81,13 @@ app.get('/api/auctions', async function (req, res) {
 });
 
 app.get('/api/auctions/:auctionsId', async function (req, res) {
+
     return res.json( await auctionService.getAuctionById(req.params.auctionsId));
 });
 
-app.get('/api/auctions/:auctionId/winner', async function (req, res) {
-    return res.json( await auctionService.getAuctionWinner(req.params.auctionsId));
+app.get('/api/auctions/:auctionsId/winner', async function (req, res) {
+    return res.json( await auctionService.getAuctionWinner( req.params.auctionsId ));
+
 });
 
 app.post('/api/auctions', function (req, res) {

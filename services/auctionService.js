@@ -19,6 +19,7 @@ const auctionService = () => {
 
     const getAuctionById = async (id) => {
         return await globalTryCatch( async() =>{
+
             return AuctionDB.findById(id);
         });
         
@@ -27,16 +28,15 @@ const auctionService = () => {
     function checkCustomer(){
         
     }
-    const getAuctionWinner = async () => {
+    const getAuctionWinner = async ( auctionId ) => {
         return await globalTryCatch( async() =>{
+
+         const auction = await AuctionDBBID
+             .find({"auctionId":auctionId})
+             .findOne()
+             .sort({price: '-1', endDate:'1'});
         
-         const auction = await AuctionDBBID.findOne().sort({price: '-1', endDate:'1'});
-        
-         //console.log(auction);
-         console.log(auction.endDate);
-         
          const customer = await customerDB.findById(auction.customerId);
-         //console.log(await AuctionDBBID.find(auction.endDate));
          return customer;
      });  
      }
