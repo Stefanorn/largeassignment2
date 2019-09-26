@@ -100,7 +100,7 @@ app.post('/api/auctions', async function (req, res){
         }else if(r == 412){
             return res.status(r).json("there is no artId or artId has already been added");
         }else{
-            return res.status(201).json("Created!");
+            return res.status(201).json(r);
             }
         }).catch(e =>{
         return res.status(412).json("Precondition failed, something went wrong!");

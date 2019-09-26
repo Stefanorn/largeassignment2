@@ -106,10 +106,12 @@ const auctionService = () => {
         }
 
         else if(arty.isAuctionItem == true){
-
-            AuctionDB.create(auction);
-            return 201;
-            
+            //return await globalTryCatch(async => {
+                return AuctionDB.create({"artID": auction.artId,
+                                          "minimumPrice": auction.minimumPrice,
+                                           "endDate": auction.endDate,
+                                           "auctionWinner": auction.auctionWinner});
+            //});
         }else{//
         //respond status code 412 because there is no artId
             return 412;
