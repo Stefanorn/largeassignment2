@@ -43,7 +43,6 @@ const auctionService = () => {
     };
 
     const getAuctionById = async (id) => {
-
         return await globalTryCatch( async() =>{
             var auction = await AuctionDB.findById(id);
 
@@ -80,14 +79,8 @@ const auctionService = () => {
     }
     const getAuctionWinner = async () => {
         return await globalTryCatch( async() =>{
-        
          const auction = await AuctionDBBID.findOne().sort({price: '-1', endDate:'1'});
-        
-         //console.log(auction);
-        // console.log(auction.endDate);
-         
          const customer = await customerDB.findById(auction.customerId);
-         //console.log(await AuctionDBBID.find(auction.endDate));
          return customer;
      });  
      }
@@ -135,8 +128,8 @@ const auctionService = () => {
                 error.status = 401;
                 return next(error);
               }
-        }).exec().exists;
-        
+        }).exec();
+
         });
         
         */
@@ -144,16 +137,47 @@ const auctionService = () => {
 
     };
 
-	const getAuctionBidsWithinAuction = async (id) => { //skilar null..s
+	const getAuctionBidsWithinAuction = async (id) => {
         return await globalTryCatch( async() =>{
 
-            return AuctionDBBID.findById(id);
+            return AuctionDBBID.find({"auctionId": id});
         });
     };
 
-	const placeNewBid = (auctionId, customerId, price, cb, errorCb) => {
-		// Your implementation goes here
-	}
+	const placeNewBid = async (auctionId, customerId, price) => {
+
+	    const auction = await AuctionDB.findById(auctionId);
+	    const minBid = auction.minimumPrice;
+        let highestBid = await AuctionDBBID.findOne({"auctionId": auctionId}).sort({price: '-1', endDate: '1'});
+        highestBid = highestBid.price;
+
+        // compares the dates
+        if( auction.endDate <= Date.now ){
+            return 403;
+        }
+
+        else if( minBid < price && highestBid < price ){
+            const customer = await customerDB.findById(customerId);
+            if(customer) {
+                AuctionDBBID.create({"auctionId": auctionId, "customerId": customerId, "price": price});
+                await AuctionDB.findById(auctionId).updateOne(
+                    {},
+                    {$set: {"auctionWinner": customerId}},
+                    {upsert: false, multi: true});
+
+                // i have created a new customer and updated the winner
+                return 201;
+            }
+            // if i havent found a customer i will return here
+            else {
+                return 412;
+            }
+        }
+        else {
+            // if the price dose not meat precondition i return here
+            return 412;
+        }
+	};
 
     return {
         getAllAuctions,

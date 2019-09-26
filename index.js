@@ -93,19 +93,18 @@ app.get('/api/auctions/:auctionsId/winner', async function (req, res) {
 app.post('/api/auctions', function (req, res){
     
 
-    /*if(req == 412){
-        console.log("HIIIIII");
 
-    }*/
-    auctionService.createAuction(req.body).then(r => {
-        return res.status(201).json(r);
-
-    }).catch( e =>{
-        return res.status(400).json(e);
-    
-    /*catch( e => {
-        return res.status(400).json(e);
-    */});
+    var response = await auctionService.createAuction(req.body).then(r =>{
+        if(r == 409){
+            return res.status(r).json("there is not an ongoing auction anymore for this item");
+        }else if(r == 412){
+            return res.status(r).json("there is no artId or artId has already been added");
+        }else{
+            return res.status(201).json("Created!");
+            }
+        }).catch(e =>{
+        return res.status(412).json("Precondition failed, something went wrong!");
+    });
 });
 
 app.post('/api/arts', function (req, res) {
@@ -128,8 +127,28 @@ app.get('/api/auctions/:auctionId/bids', async function (req, res) {
     return res.json( await auctionService.getAuctionBidsWithinAuction(req.params.auctionId));
 });
 
-app.post('/api/auctions/:auctionId/bids', function (req, res) {
-    return res.json({hello:'world'});
+app.post('/api/auctions/:auctionId/bids', async function (req, res) {
+
+    var response = await auctionService.placeNewBid( req.params.auctionId, req.body.customerId, req.body.price ).then( r =>{
+
+        if( r == 412 ){
+            return res.status(r).json("Precindition faaled maaan do sometnig diffrent duude.");
+        }
+        else if( r == 403){
+            return  res.status(r).json("dude it is forbiden man, nooot coool!")
+        }
+        else if( r == 201){
+            return  res.status(r).json("yeee meeen you sucessfully creaded a bid " + req.body.price + " $");
+        }
+        else {
+            return  res.status(500).json("my code is not doint stuff");
+        }
+    }).catch(e =>{
+        return res.status(412).json("Precindition faaled maaan do sometnig diffrent duude.");
+
+
+    });
+
 });
 
 // http://Localhost:3000
