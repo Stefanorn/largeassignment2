@@ -10,7 +10,6 @@ const globalTryCatch = async cb => {
       return err;
     }
 }
-
 const auctionService = () => {
     const getAllAuctions = async () => {
         return await globalTryCatch( async () =>{
@@ -75,7 +74,7 @@ const auctionService = () => {
     };
 
     function checkCustomer(){
-        
+ 
     }
     const getAuctionWinner = async () => {
         return await globalTryCatch( async() =>{
@@ -106,12 +105,12 @@ const auctionService = () => {
         }
 
         else if(arty.isAuctionItem == true){
-            //return await globalTryCatch(async => {
+            
                 return AuctionDB.create({"artID": auction.artId,
                                           "minimumPrice": auction.minimumPrice,
                                            "endDate": auction.endDate,
                                            "auctionWinner": auction.auctionWinner});
-            //});
+            
         }else{//
         //respond status code 412 because there is no artId
             return 412;
@@ -120,7 +119,6 @@ const auctionService = () => {
 
 	const getAuctionBidsWithinAuction = async (id) => {
         return await globalTryCatch( async() =>{
-
             return AuctionDBBID.find({"auctionId": id});
         });
     };
