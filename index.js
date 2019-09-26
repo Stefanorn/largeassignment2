@@ -117,12 +117,6 @@ app.post('/api/arts', function (req, res) {
 
 });
 
-
-
-app.post('/api/auctions', function (req, res) {
-    return res.json({hello:'world'});
-});
-
 app.get('/api/auctions/:auctionId/bids', async function (req, res) {
     return res.json( await auctionService.getAuctionBidsWithinAuction(req.params.auctionId));
 });
