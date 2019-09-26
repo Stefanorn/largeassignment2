@@ -93,14 +93,15 @@ const auctionService = () => {
         var auction_ = await AuctionDB.findById(arty.artId);
         let auction_datetime = new Date(auction.endDate);
 
-       var auctionArt = await AuctionDB.findOne({"artID": auction.artID});
+       var auctionArt = await AuctionDB.findOne({"artID": auction.artId});
 
-        if(auction_datetime >= Date.now()){//getTime() >= current_datetime.getTime()){
+        if(auction_datetime <= Date.now()){//getTime() >= current_datetime.getTime()){
             //respond status code 409 because there is not an ongoing auction anymore
             return 409;
         }
         else if(auctionArt != null){
             //return status code for ART id already in 
+            console.log(auctionArt);
             return 412;
         }
 
