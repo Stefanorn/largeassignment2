@@ -121,18 +121,25 @@ app.get('/api/auctions/:auctionId/bids', async function (req, res) {
 
 app.post('/api/auctions/:auctionId/bids', async function (req, res) {
 
-    var responce = await auctionService.placeNewBid( req.params.auctionId, req.body.customerId, req.body.price );
+    var response = await auctionService.placeNewBid( req.params.auctionId, req.body.customerId, req.body.price ).then( r =>{
 
-    if( responce === 412 ){
-        return res.status(responce).json("ohh no 412 maby you need to bid higher maaan ...");
-    }
-    else if( responce === 403){
-        return  res.status(responce).json("dude it is forbiden man, nooot coool!")
-    }
-    else if( responce === 201){
-        return  res.status(responce).json("yeee meeen you sucessfully creaded a bid " + req.body.price + " $");
-    }
+        if( r == 412 ){
+            return res.status(r).json("Precindition faaled maaan do sometnig diffrent duude.");
+        }
+        else if( r == 403){
+            return  res.status(r).json("dude it is forbiden man, nooot coool!")
+        }
+        else if( r == 201){
+            return  res.status(r).json("yeee meeen you sucessfully creaded a bid " + req.body.price + " $");
+        }
+        else {
+            return  res.status(500).json("my code is not doint stuff");
+        }
+    }).catch(e =>{
+        return res.status(412).json("Precindition faaled maaan do sometnig diffrent duude.");
 
+
+    });
 
 });
 

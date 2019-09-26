@@ -97,7 +97,7 @@ const auctionService = () => {
                 return next(error);
               }
         }).exec();
-        
+
         });
         
         
@@ -114,25 +114,35 @@ const auctionService = () => {
 
 	const placeNewBid = async (auctionId, customerId, price) => {
 
-	    var auction = await AuctionDB.findById(auctionId);
-	    minBid = auction.minimumPrice;
-
-        var highestBid = await AuctionDBBID.findOne({ "auctionId": auctionId }).sort({price: "-1", endDate:'1'});
+	    const auction = await AuctionDB.findById(auctionId);
+	    const minBid = auction.minimumPrice;
+        let highestBid = await AuctionDBBID.findOne({"auctionId": auctionId}).sort({price: '-1', endDate: '1'});
         highestBid = highestBid.price;
 
-        if( minBid < price && highestBid < price ){
-            AuctionDBBID.create({ "auctionId":auctionId , "customerId": customerId, "price": price });
-            var updated = await AuctionDB.findById(auctionId).updateOne(
-                {},
-                {$set: {"auctionWinner": customerId}},
-                {upsert: false, multi: true});
-            console.log(await AuctionDB.findById(auctionId));
-            return 201;
-        }
-        else if( auction.endDate <= Date.now ){
+        // compares the dates
+        if( auction.endDate <= Date.now ){
             return 403;
         }
+
+        else if( minBid < price && highestBid < price ){
+            const customer = await customerDB.findById(customerId);
+            if(customer) {
+                AuctionDBBID.create({"auctionId": auctionId, "customerId": customerId, "price": price});
+                await AuctionDB.findById(auctionId).updateOne(
+                    {},
+                    {$set: {"auctionWinner": customerId}},
+                    {upsert: false, multi: true});
+
+                // i have created a new customer and updated the winner
+                return 201;
+            }
+            // if i havent found a customer i will return here
+            else {
+                return 412;
+            }
+        }
         else {
+            // if the price dose not meat precondition i return here
             return 412;
         }
 	};
