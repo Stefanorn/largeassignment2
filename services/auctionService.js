@@ -97,44 +97,22 @@ const auctionService = () => {
 
         if(auction_datetime >= Date.now()){//getTime() >= current_datetime.getTime()){
             //respond status code 409 because there is not an ongoing auction anymore
-            console.log("409!!!!!!!!!!!!!!!");
             return 409;
         }
         else if(auctionArt != null){
             //return status code for ART id already in 
-            console.log("works");
             return 412;
         }
 
         else if(arty.isAuctionItem == true){
 
-            console.log("isAuctionItem is true!");
-            //call create!!!!!!!!!!!
             AuctionDB.create(auction);
             return 201;
             
         }else{//
         //respond status code 412 because there is no artId
-            console.log("412!!!!!!!!!!!!!!!");
-        
             return 412;
         }
-
-
-        /*return await globalTryCatch(async () => {
-        return ArtDB.findById(auction.artId).find().where({isAuctionItem: "true"}, function(err, docs){
-            if(err) {
-                var error = new Error('Error!');
-                error.status = 401;
-                return next(error);
-              }
-        }).exec();
-
-        });
-        
-        */
-           
-
     };
 
 	const getAuctionBidsWithinAuction = async (id) => {

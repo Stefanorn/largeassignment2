@@ -90,7 +90,7 @@ app.get('/api/auctions/:auctionsId/winner', async function (req, res) {
 
 });
 
-app.post('/api/auctions', function (req, res){
+app.post('/api/auctions', async function (req, res){
     
 
 
