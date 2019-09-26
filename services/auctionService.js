@@ -73,9 +73,6 @@ const auctionService = () => {
         
     };
 
-    function checkCustomer(){
- 
-    }
     const getAuctionWinner = async () => {
         return await globalTryCatch( async() =>{
          const auction = await AuctionDBBID.findOne().sort({price: '-1', endDate:'1'});
