@@ -128,12 +128,13 @@ const auctionService = () => {
 	const placeNewBid = async (auctionId, customerId, price) => {
 
 	    const auction = await AuctionDB.findById(auctionId);
-	    const minBid = auction.minimumPrice;
+        const minBid = auction.minimumPrice;
+        let auction_datetime = new Date(auction.endDate);
         let highestBid = await AuctionDBBID.findOne({"auctionId": auctionId}).sort({price: '-1', endDate: '1'});
         highestBid = highestBid.price;
 
         // compares the dates
-        if( auction.endDate <= Date.now ){
+        if(auction_datetime <= Date.now()){
             return 403;
         }
 
