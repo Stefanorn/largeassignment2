@@ -92,11 +92,20 @@ app.get('/api/auctions/:auctionsId/winner', async function (req, res) {
 
 app.post('/api/auctions', function (req, res){
     
+
+    /*if(req == 412){
+        console.log("HIIIIII");
+
+    }*/
     auctionService.createAuction(req.body).then(r => {
         return res.status(201).json(r);
-    }).catch( e => {
+
+    }).catch( e =>{
         return res.status(400).json(e);
-    });
+    
+    /*catch( e => {
+        return res.status(400).json(e);
+    */});
 });
 
 app.post('/api/arts', function (req, res) {
